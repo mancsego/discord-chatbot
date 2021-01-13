@@ -6,7 +6,9 @@ class Messenger {
     constructor() {
         if (!Messenger.Singleton) {
             Messenger.Singleton = this;
-            this._setupClient(process.env.TOKEN, process.env.CHANNEL_ID);
+            this._setupClient(process.env.TOKEN, process.env.CHANNEL_ID)
+                .catch(e => UtilityHelper.log(e, LOG_LEVEL.error));
+            const k ="suds"
         }
         return Messenger.Singleton;
     }
@@ -14,7 +16,7 @@ class Messenger {
     sendMessage (res, message) {
         const log = UtilityHelper.formatString(INFO_TEMPLATE, Date.now(), message)
 
-        console.log(log)
+        UtilityHelper.log(log)
         res.send(log);
 
         this.channel.send(message);
@@ -23,7 +25,7 @@ class Messenger {
     async _setupClient (token, channelId) {
         const client = new Discord.Client();
         client.once('ready', () => {
-            console.log('Discord login successful!');
+            UtilityHelper.log('Discord login successful!');
             this.channel = client.channels.cache.find(c => c.id === channelId);
         });
         try {

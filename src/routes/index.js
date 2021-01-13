@@ -6,7 +6,7 @@ const DEPLOYMENT = {
     DONE: '%s [%s] deployment successfully finished'
 };
 
-const FALLBACK_MESSAGE = 'Unknown deployment event. [project: %s][hash: %s]'
+const FALLBACK_MESSAGE = 'Unknown deployment event. [project: %s][hash: %s]';
 
 module.exports = (app) => {
     app.get('/deployment-status', (req, res) => {
@@ -17,15 +17,15 @@ module.exports = (app) => {
             : messenger.sendMessage(res, helper.formatString(FALLBACK_MESSAGE, params.project, params.hash))
     })
 
-    app.get('/special-status', (req, res) => {
-        messenger.sendMessage(res, req.query.message);
+    app.get('/post-special', (req, res) => {
+        messenger.sendMessage(res, req.query.msg);
     })
-}
+};
 
 function _extractParams (query) {
     return {
         project: query.project ? query.project.toUpperCase() : query.project,
         hash: query.hash,
         event: query.event.toUpperCase()
-    }
+    };
 }
